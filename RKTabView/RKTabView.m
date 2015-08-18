@@ -166,6 +166,13 @@
                     }
                 }
             }
+            else {
+                if (self.delegate) {
+                    if ([self delegateRespondsToTapOnEnabledSelector] && notify) {
+                        [self.delegate tabView:self didTapOnEnabledItemAtIndex:[self indexOfTab:tabItem] tab:tabItem];
+                    }
+                }
+            }
             [self setTabContent:tabItem];
             break;
     }
@@ -351,6 +358,15 @@
         return YES;
     } else {
         NSLog(@"Attention! Your delegate doesn't have tabView:tabBecameEnabledAtIndex:tab: method implementation!");
+        return NO;
+    }
+}
+
+- (BOOL)delegateRespondsToTapOnEnabledSelector {
+    if ([self.delegate respondsToSelector:@selector(tabView:didTapOnEnabledItemAtIndex:tab:)]) {
+        return YES;
+    } else {
+        NSLog(@"Attention! Your delegate doesn't have tabView:didTapOnEnabledItemAtIndex:tab: method implementation!");
         return NO;
     }
 }

@@ -22,6 +22,8 @@ static inline HorizontalEdgeInsets HorizontalEdgeInsetsMake (CGFloat left, CGFlo
 - (void)tabView:(RKTabView *)tabView tabBecameEnabledAtIndex:(NSUInteger)index tab:(RKTabItem *)tabItem;
 //Called Only for unexcludable items. (TabTypeUnexcludable)
 - (void)tabView:(RKTabView *)tabView tabBecameDisabledAtIndex:(NSUInteger)index tab:(RKTabItem *)tabItem;
+//Called Only for usual items. (TabTypeUsual)
+- (void)tabView:(RKTabView *)tabView didTapOnEnabledItemAtIndex:(NSUInteger)index tab:(RKTabItem *)tabItem;
 
 @end
 
