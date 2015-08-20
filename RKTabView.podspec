@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
 
   s.platform     = :ios, '5.0'
   s.source       = { :git => "https://github.com/RafaelKayumov/RKTabView.git", :tag => s.version }
-  s.source_files  = 'RKTabView/RKTab{Item,View}.{h,m}, , RKTabView/UIView+Badge.{h,m}’
+  s.source_files  = 'RKTabView/RKTab{Item,View}.{h,m}', 'RKTabView/UIView+Badge.{h,m}'
   s.requires_arc = true
 
 end
