@@ -41,9 +41,14 @@ static inline HorizontalEdgeInsets HorizontalEdgeInsetsMake (CGFloat left, CGFlo
 @property (nonatomic, strong) NSArray *tabItems;
 @property (nonatomic, readwrite) HorizontalEdgeInsets horizontalInsets;
 
+@property (nonatomic, strong) UIFont *badgeFont;
+@property (nonatomic, strong) UIColor *badgeTextColor;
+@property (nonatomic, strong) UIColor *badgeBackgroundColor;
+
 - (id)initWithFrame:(CGRect)frame andTabItems:(NSArray *)tabItems;
 
 - (void)switchTabIndex:(NSUInteger)index;
+- (void)setBadgeValue:(NSInteger)value forTabAtIndex:(NSUInteger)index;
 - (RKTabItem *)selectedTabItem;
 
 @end

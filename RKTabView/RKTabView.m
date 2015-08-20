@@ -3,6 +3,7 @@
 
 #import "RKTabView.h"
 #import "RkTabItem.h"
+#import "UIView+Badge.h"
 
 #define DARKER_BACKGROUND_VIEW_TAG 33
 
@@ -91,6 +92,27 @@
     return _upperSeparatorLineColor;
 }
 
+- (UIColor *)badgeBackgroundColor {
+    if (!_badgeBackgroundColor) {
+        _badgeBackgroundColor = [UIColor greenColor];
+    }
+    return _badgeBackgroundColor;
+}
+
+- (UIColor *)badgeTextColor {
+    if (!_badgeTextColor) {
+        _badgeTextColor = [UIColor whiteColor];
+    }
+    return _badgeTextColor;
+}
+
+- (UIFont *)badgeFont {
+    if (!_badgeFont) {
+        _badgeFont = [UIFont italicSystemFontOfSize:15];
+    }
+    return _badgeFont;
+}
+
 #pragma mark - Private
 
 - (void)cleanTabView {
@@ -103,6 +125,7 @@
 - (void)buildUI {
     //clean before layout items
     [self cleanTabView];
+    
     //build UI
     for (RKTabItem *item in self.tabItems) {
         UIControl *tab = [self tabForItem:item];
@@ -186,6 +209,13 @@
     [self switchTab:tabItem notify:YES];
 }
 
+- (void)setBadgeValue:(NSInteger)value forTabAtIndex:(NSUInteger)index {
+    if (index < self.tabItems.count) {
+        [(RKTabItem *)self.tabItems[index] setBadgeValue:value];
+        [self setTabContent:self.tabItems[index]];
+    }
+}
+
 #pragma mark - Helper methods
 
 - (UIControl *)existingTabForTabItem:(RKTabItem *)tabItem {
@@ -224,7 +254,7 @@
 - (void)setTabContent:(UIControl *)tab withTabItem:(RKTabItem *)tabItem {
     //clean tab before setting content
     for (UIView *subview in tab.subviews) {
-        if (subview != [tab viewWithTag:DARKER_BACKGROUND_VIEW_TAG]) {
+        if ((subview != [tab viewWithTag:DARKER_BACKGROUND_VIEW_TAG]) && (subview != tab.badge)) {
             [subview removeFromSuperview];
         }
     }
@@ -310,6 +340,9 @@
     } else {
         tab.backgroundColor = tabItem.backgroundColor ? tabItem.backgroundColor : [UIColor clearColor];
     }
+    
+    // Badge count
+    tab.badgeValue = [NSString stringWithFormat:@"%@", @(tabItem.badgeValue)];
 }
 
 - (void)setTabContent:(RKTabItem *)tabItem {
@@ -337,6 +370,15 @@
             darkerBackgroundView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
             [tab addSubview:darkerBackgroundView];
         }
+        
+        // Set up badge view
+        tab.badgeBGColor = self.badgeBackgroundColor;
+        tab.badgeTextColor = self.badgeTextColor;
+        tab.shouldHideBadgeAtZero = YES;
+        tab.shouldAnimateBadge = YES;
+        tab.badgeValue = [NSString stringWithFormat:@"%@", @(tabItem.badgeValue)];
+        tab.badgeOffsetX = tabItem.badgeOffsetX;
+        tab.badgeOffsetY = tabItem.badgeOffsetY;
         
         //setup
         [self setTabContent:tab withTabItem:tabItem];

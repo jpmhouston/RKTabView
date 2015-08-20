@@ -28,6 +28,10 @@ typedef enum {
 @property (nonatomic, strong) UIColor *titleFontColorEnabled;
 @property (nonatomic, strong, readonly) UIImage *imageForCurrentState;
 
+@property (nonatomic, assign) NSInteger badgeValue;
+@property (nonatomic, assign) CGFloat badgeOffsetX;
+@property (nonatomic, assign) CGFloat badgeOffsetY;
+
 + (RKTabItem *)createUsualItemWithImageEnabled:(UIImage *)imageEnabled
                                imageDisabled:(UIImage *)imageDisabled;
 

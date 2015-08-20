@@ -24,6 +24,10 @@
         tabItem.imageDisabled = imageDisabled;
         tabItem.tabState = TabStateDisabled;
         tabItem.tabType = TabTypeUsual;
+        
+        tabItem.badgeValue = 0;
+        tabItem.badgeOffsetX = 0.0f;
+        tabItem.badgeOffsetY = 0.0f;
     }
     return tabItem;
 }
@@ -36,6 +40,10 @@
         tabItem.imageDisabled = imageDisabled;
         tabItem.tabState = TabStateDisabled;
         tabItem.tabType = TabTypeUnexcludable;
+        
+        tabItem.badgeValue = 0;
+        tabItem.badgeOffsetX = 0.0f;
+        tabItem.badgeOffsetY = 0.0f;
     }
     return tabItem;
 }
@@ -49,6 +57,10 @@
         tabItem.tabType = TabTypeButton;
         tabItem.target = target;
         tabItem.selector = selector;
+        
+        tabItem.badgeValue = 0;
+        tabItem.badgeOffsetX = 0.0f;
+        tabItem.badgeOffsetY = 0.0f;
     }
     return tabItem;
 }
