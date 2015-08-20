@@ -271,6 +271,7 @@ NSString const *UIView_badgeValueKey = @"UIView_badgeValueKey";
     NSNumber *number = [NSNumber numberWithDouble:badgeOffsetX];
     objc_setAssociatedObject(self, &UIView_badgeOffsetXKey, number, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     if (self.badge) {
+        self.badgeOriginX = (self.frame.size.width - self.badge.frame.size.width/2) + badgeOffsetX;
         [self updateBadgeFrame];
     }
 }
@@ -284,6 +285,7 @@ NSString const *UIView_badgeValueKey = @"UIView_badgeValueKey";
     NSNumber *number = [NSNumber numberWithDouble:badgeOffsetY];
     objc_setAssociatedObject(self, &UIView_badgeOffsetYKey, number, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     if (self.badge) {
+        self.badgeOriginY = -4 + self.badgeOffsetY;
         [self updateBadgeFrame];
     }
 }

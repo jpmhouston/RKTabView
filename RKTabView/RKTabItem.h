@@ -29,18 +29,17 @@ typedef enum {
 @property (nonatomic, strong, readonly) UIImage *imageForCurrentState;
 
 @property (nonatomic, assign) NSInteger badgeValue;
-@property (nonatomic, assign) CGFloat badgeOffsetX;
-@property (nonatomic, assign) CGFloat badgeOffsetY;
+@property (nonatomic, assign) CGSize badgeOffset;
 
 + (RKTabItem *)createUsualItemWithImageEnabled:(UIImage *)imageEnabled
-                               imageDisabled:(UIImage *)imageDisabled;
+                                 imageDisabled:(UIImage *)imageDisabled;
 
 + (RKTabItem *)createUnexcludableItemWithImageEnabled:(UIImage *)imageEnabled
-                               imageDisabled:(UIImage *)imageDisabled;
+                                        imageDisabled:(UIImage *)imageDisabled;
 
 + (RKTabItem *)createButtonItemWithImage:(UIImage *)image
-                         target:(id)target
-                       selector:(SEL)selector;
+                                  target:(id)target
+                                selector:(SEL)selector;
 
 - (void)switchState;
 

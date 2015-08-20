@@ -17,7 +17,7 @@
 @implementation RKTabItem
 
 + (RKTabItem *)createUsualItemWithImageEnabled:(UIImage *)imageEnabled
-                      imageDisabled:(UIImage *)imageDisabled {
+                                 imageDisabled:(UIImage *)imageDisabled {
     RKTabItem *tabItem = [[RKTabItem alloc] init];
     if (tabItem) {
         tabItem.imageEnabled = imageEnabled;
@@ -26,14 +26,13 @@
         tabItem.tabType = TabTypeUsual;
         
         tabItem.badgeValue = 0;
-        tabItem.badgeOffsetX = 0.0f;
-        tabItem.badgeOffsetY = 0.0f;
+        tabItem.badgeOffset = CGSizeZero;
     }
     return tabItem;
 }
 
 + (RKTabItem *)createUnexcludableItemWithImageEnabled:(UIImage *)imageEnabled
-                             imageDisabled:(UIImage *)imageDisabled {
+                                        imageDisabled:(UIImage *)imageDisabled {
     RKTabItem *tabItem = [[RKTabItem alloc] init];
     if (tabItem) {
         tabItem.imageEnabled = imageEnabled;
@@ -42,15 +41,14 @@
         tabItem.tabType = TabTypeUnexcludable;
         
         tabItem.badgeValue = 0;
-        tabItem.badgeOffsetX = 0.0f;
-        tabItem.badgeOffsetY = 0.0f;
+        tabItem.badgeOffset = CGSizeZero;
     }
     return tabItem;
 }
 
 + (RKTabItem *)createButtonItemWithImage:(UIImage *)image
-                       target:(id)target
-                     selector:(SEL)selector {
+                                  target:(id)target
+                                selector:(SEL)selector {
     RKTabItem *tabItem = [[RKTabItem alloc] init];
     if (tabItem) {
         tabItem.imageEnabled = image;
@@ -59,8 +57,7 @@
         tabItem.selector = selector;
         
         tabItem.badgeValue = 0;
-        tabItem.badgeOffsetX = 0.0f;
-        tabItem.badgeOffsetY = 0.0f;
+        tabItem.badgeOffset = CGSizeZero;
     }
     return tabItem;
 }

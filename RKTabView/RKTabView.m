@@ -38,11 +38,11 @@
     NSUInteger selectedIndex = [self.tabItems indexOfObjectPassingTest:^BOOL(RKTabItem *obj, NSUInteger idx, BOOL *stop) {
         return obj.tabState == TabStateEnabled;
     }];
-  
+    
     if (selectedIndex == NSNotFound) {
         return nil;
     }
-  
+    
     RKTabItem *selectedItem = [self.tabItems objectAtIndex:selectedIndex];
     return selectedItem;
 }
@@ -94,23 +94,23 @@
 
 - (UIColor *)badgeBackgroundColor {
     if (!_badgeBackgroundColor) {
-        _badgeBackgroundColor = [UIColor greenColor];
+        _badgeBackgroundColor = [UIColor redColor];
     }
     return _badgeBackgroundColor;
 }
 
-- (UIColor *)badgeTextColor {
-    if (!_badgeTextColor) {
-        _badgeTextColor = [UIColor whiteColor];
+- (UIColor *)badgeTitleColor {
+    if (!_badgeTitleColor) {
+        _badgeTitleColor = [UIColor whiteColor];
     }
-    return _badgeTextColor;
+    return _badgeTitleColor;
 }
 
-- (UIFont *)badgeFont {
-    if (!_badgeFont) {
-        _badgeFont = [UIFont italicSystemFontOfSize:15];
+- (UIFont *)badgeTitleFont {
+    if (!_badgeTitleFont) {
+        _badgeTitleFont = [UIFont italicSystemFontOfSize:15];
     }
-    return _badgeFont;
+    return _badgeTitleFont;
 }
 
 #pragma mark - Private
@@ -373,12 +373,13 @@
         
         // Set up badge view
         tab.badgeBGColor = self.badgeBackgroundColor;
-        tab.badgeTextColor = self.badgeTextColor;
+        tab.badgeTextColor = self.badgeTitleColor;
+        tab.badgeFont = self.badgeTitleFont;
         tab.shouldHideBadgeAtZero = YES;
         tab.shouldAnimateBadge = YES;
         tab.badgeValue = [NSString stringWithFormat:@"%@", @(tabItem.badgeValue)];
-        tab.badgeOffsetX = tabItem.badgeOffsetX;
-        tab.badgeOffsetY = tabItem.badgeOffsetY;
+        tab.badgeOffsetX = tabItem.badgeOffset.width;
+        tab.badgeOffsetY = tabItem.badgeOffset.height;
         
         //setup
         [self setTabContent:tab withTabItem:tabItem];
