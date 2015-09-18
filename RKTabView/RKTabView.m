@@ -267,7 +267,10 @@
         titleLabel.numberOfLines = 2;
         titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
         titleLabel.textAlignment = NSTextAlignmentCenter;
-        titleLabel.adjustsLetterSpacingToFitWidth = YES;
+        
+        //This was deprecated in iOS 7. If this is needed one can use the attributedString and adjust the NSKernAttributeName there.
+        //titleLabel.adjustsLetterSpacingToFitWidth = YES;
+        
         titleLabel.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth;
         
         UIFont *font = nil;
@@ -291,7 +294,10 @@
         titleLabel.textColor = textColor;
         titleLabel.backgroundColor = [UIColor clearColor];
         
-        titleSize = [tabItem.titleString sizeWithFont:titleLabel.font constrainedToSize:CGSizeMake(tab.bounds.size.width, MAXFLOAT) lineBreakMode:NSLineBreakByWordWrapping];
+        titleSize = [tabItem.titleString boundingRectWithSize:CGSizeMake(tab.bounds.size.width, MAXFLOAT)
+                                                      options:NSStringDrawingUsesLineFragmentOrigin
+                                                   attributes:@{NSFontAttributeName: titleLabel.font}
+                                                      context:nil].size;
         titleLabel.text = tabItem.titleString;
     }
     
