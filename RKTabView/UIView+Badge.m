@@ -55,7 +55,7 @@ NSString const *UIView_badgeValueKey = @"UIView_badgeValueKey";
     self.badgeOriginX = (self.frame.size.width - self.badge.frame.size.width/2) + self.badgeOffsetX;
     self.badgeOriginY = -4 + self.badgeOffsetY;
     
-    self.badgePadding = 6;
+    self.badgePadding = 4;
     self.badgeMinSize = 8;
     self.shouldHideBadgeAtZero = YES;
     self.shouldAnimateBadge = YES;
