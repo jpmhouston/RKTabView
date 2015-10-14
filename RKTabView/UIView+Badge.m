@@ -173,6 +173,7 @@ NSString const *UIView_badgeValueKey = @"UIView_badgeValueKey";
         [self updateBadgeValueAnimated:NO];
     }
     else {
+        [self bringSubviewToFront:self.badge];
         [self updateBadgeValueAnimated:YES];
     }
 }
