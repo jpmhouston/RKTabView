@@ -52,4 +52,8 @@
     NSLog(@"Tab № %tu became disabled on tab view", index);
 }
 
+- (void)tabView:(RKTabView *)tabView didTapOnEnabledItemAtIndex:(NSUInteger)index tab:(RKTabItem *)tabItem {
+    NSLog(@"Tab № %tu already enabled on tab view", index);
+}
+
 @end

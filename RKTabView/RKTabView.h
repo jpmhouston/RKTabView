@@ -22,6 +22,8 @@ static inline HorizontalEdgeInsets HorizontalEdgeInsetsMake (CGFloat left, CGFlo
 - (void)tabView:(RKTabView *)tabView tabBecameEnabledAtIndex:(NSUInteger)index tab:(RKTabItem *)tabItem;
 //Called Only for unexcludable items. (TabTypeUnexcludable)
 - (void)tabView:(RKTabView *)tabView tabBecameDisabledAtIndex:(NSUInteger)index tab:(RKTabItem *)tabItem;
+//Called Only for usual items. (TabTypeUsual)
+- (void)tabView:(RKTabView *)tabView didTapOnEnabledItemAtIndex:(NSUInteger)index tab:(RKTabItem *)tabItem;
 
 @end
 
@@ -39,9 +41,14 @@ static inline HorizontalEdgeInsets HorizontalEdgeInsetsMake (CGFloat left, CGFlo
 @property (nonatomic, strong) NSArray *tabItems;
 @property (nonatomic, readwrite) HorizontalEdgeInsets horizontalInsets;
 
+@property (nonatomic, strong) UIFont *badgeTitleFont;
+@property (nonatomic, strong) UIColor *badgeTitleColor;
+@property (nonatomic, strong) UIColor *badgeBackgroundColor;
+
 - (id)initWithFrame:(CGRect)frame andTabItems:(NSArray *)tabItems;
 
 - (void)switchTabIndex:(NSUInteger)index;
+- (void)setBadgeValue:(NSInteger)value forTabAtIndex:(NSUInteger)index;
 - (RKTabItem *)selectedTabItem;
 
 @end

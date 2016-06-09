@@ -8,8 +8,8 @@ Pod::Spec.new do |s|
   s.author       = { 'Rafael Kayumov' => 'justpoc@gmail.com' }
 
   s.platform     = :ios, '5.0'
-  s.source       = { :git => 'https://github.com/RafaelKayumov/RKTabView.git', :tag => s.version.to_s }
-  s.source_files  = 'RKTabView/RKTab{Item,View}.{h,m}'
+  s.source       = { :git => "https://github.com/RafaelKayumov/RKTabView.git", :tag => s.version.to_s }
+  s.source_files  = 'RKTabView/RKTab{Item,View}.{h,m}', 'RKTabView/UIView+Badge.{h,m}'
   s.requires_arc = true
 
 end

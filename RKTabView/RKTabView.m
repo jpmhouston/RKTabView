@@ -3,6 +3,7 @@
 
 #import "RKTabView.h"
 #import "RkTabItem.h"
+#import "UIView+Badge.h"
 
 #define DARKER_BACKGROUND_VIEW_TAG 33
 
@@ -43,11 +44,11 @@
     NSUInteger selectedIndex = [self.tabItems indexOfObjectPassingTest:^BOOL(RKTabItem *obj, NSUInteger idx, BOOL *stop) {
         return obj.tabState == TabStateEnabled;
     }];
-  
+    
     if (selectedIndex == NSNotFound) {
         return nil;
     }
-  
+    
     RKTabItem *selectedItem = [self.tabItems objectAtIndex:selectedIndex];
     return selectedItem;
 }
@@ -97,6 +98,27 @@
     return _upperSeparatorLineColor;
 }
 
+- (UIColor *)badgeBackgroundColor {
+    if (!_badgeBackgroundColor) {
+        _badgeBackgroundColor = [UIColor redColor];
+    }
+    return _badgeBackgroundColor;
+}
+
+- (UIColor *)badgeTitleColor {
+    if (!_badgeTitleColor) {
+        _badgeTitleColor = [UIColor whiteColor];
+    }
+    return _badgeTitleColor;
+}
+
+- (UIFont *)badgeTitleFont {
+    if (!_badgeTitleFont) {
+        _badgeTitleFont = [UIFont italicSystemFontOfSize:15];
+    }
+    return _badgeTitleFont;
+}
+
 #pragma mark - Private
 
 - (void)cleanTabView {
@@ -109,6 +131,7 @@
 - (void)buildUI {
     //clean before layout items
     [self cleanTabView];
+    
     //build UI
     for (RKTabItem *item in self.tabItems) {
         UIControl *tab = [self tabForItem:item];
@@ -175,6 +198,13 @@
                     }
                 }
             }
+            else {
+                if (self.delegate) {
+                    if ([self delegateRespondsToTapOnEnabledSelector] && notify) {
+                        [self.delegate tabView:self didTapOnEnabledItemAtIndex:[self indexOfTab:tabItem] tab:tabItem];
+                    }
+                }
+            }
             [self setTabContent:tabItem];
             break;
     }
@@ -186,6 +216,13 @@
     UIControl *tabView = (UIControl *)sender;
     RKTabItem *tabItem = [self tabItemForTab:tabView];
     [self switchTab:tabItem notify:YES];
+}
+
+- (void)setBadgeValue:(NSInteger)value forTabAtIndex:(NSUInteger)index {
+    if (index < self.tabItems.count) {
+        [(RKTabItem *)self.tabItems[index] setBadgeValue:value];
+        [self setTabContent:self.tabItems[index]];
+    }
 }
 
 #pragma mark - Helper methods
@@ -226,7 +263,7 @@
 - (void)setTabContent:(UIControl *)tab withTabItem:(RKTabItem *)tabItem {
     //clean tab before setting content
     for (UIView *subview in tab.subviews) {
-        if (subview != [tab viewWithTag:DARKER_BACKGROUND_VIEW_TAG]) {
+        if ((subview != [tab viewWithTag:DARKER_BACKGROUND_VIEW_TAG]) && (subview != tab.badge)) {
             [subview removeFromSuperview];
         }
     }
@@ -239,7 +276,10 @@
         titleLabel.numberOfLines = 2;
         titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
         titleLabel.textAlignment = NSTextAlignmentCenter;
-        titleLabel.adjustsLetterSpacingToFitWidth = YES;
+        
+        //This was deprecated in iOS 7. If this is needed one can use the attributedString and adjust the NSKernAttributeName there.
+        //titleLabel.adjustsLetterSpacingToFitWidth = YES;
+        
         titleLabel.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleWidth;
         
         UIFont *font = nil;
@@ -263,7 +303,10 @@
         titleLabel.textColor = textColor;
         titleLabel.backgroundColor = [UIColor clearColor];
         
-        titleSize = [tabItem.titleString sizeWithFont:titleLabel.font constrainedToSize:CGSizeMake(tab.bounds.size.width, MAXFLOAT) lineBreakMode:NSLineBreakByWordWrapping];
+        titleSize = [tabItem.titleString boundingRectWithSize:CGSizeMake(tab.bounds.size.width, MAXFLOAT)
+                                                      options:NSStringDrawingUsesLineFragmentOrigin
+                                                   attributes:@{NSFontAttributeName: titleLabel.font}
+                                                      context:nil].size;
         titleLabel.text = tabItem.titleString;
     }
     
@@ -288,8 +331,8 @@
     //Subviews frames
     if (titleLabel) {
         CGFloat wholeGapHeight = tab.bounds.size.height - ((UIView *)interfaceElement).bounds.size.height - titleSize.height;
-        titleLabel.frame = CGRectMake(tab.bounds.size.width/2 - titleSize.width/2, wholeGapHeight*2/3+((UIView *)interfaceElement).bounds.size.height, titleSize.width+2, titleSize.height+2);
-        ((UIView *)interfaceElement).frame = CGRectMake(tab.bounds.size.width/2 - ((UIView *)interfaceElement).bounds.size.width/2, wholeGapHeight/3, ((UIView *)interfaceElement).bounds.size.width, ((UIView *)interfaceElement).bounds.size.height);
+        titleLabel.frame = CGRectMake(tab.bounds.size.width/2 - titleSize.width/2, wholeGapHeight*2/4+((UIView *)interfaceElement).bounds.size.height, titleSize.width+2, titleSize.height+2);
+        ((UIView *)interfaceElement).frame = CGRectMake(tab.bounds.size.width/2 - ((UIView *)interfaceElement).bounds.size.width/2, wholeGapHeight/2, ((UIView *)interfaceElement).bounds.size.width, ((UIView *)interfaceElement).bounds.size.height);
         [tab addSubview:titleLabel];
     } else {
         ((UIView *)interfaceElement).center = CGPointMake(tab.bounds.size.width/2, tab.bounds.size.height/2);
@@ -318,6 +361,9 @@
     } else {
         tab.backgroundColor = tabItem.backgroundColor ? tabItem.backgroundColor : [UIColor clearColor];
     }
+    
+    // Badge count
+    tab.badgeValue = [NSString stringWithFormat:@"%@", @(tabItem.badgeValue)];
 }
 
 - (void)setTabContent:(RKTabItem *)tabItem {
@@ -346,6 +392,16 @@
             [tab addSubview:darkerBackgroundView];
         }
         
+        // Set up badge view
+        tab.badgeBGColor = self.badgeBackgroundColor;
+        tab.badgeTextColor = self.badgeTitleColor;
+        tab.badgeFont = self.badgeTitleFont;
+        tab.shouldHideBadgeAtZero = YES;
+        tab.shouldAnimateBadge = YES;
+        tab.badgeValue = [NSString stringWithFormat:@"%@", @(tabItem.badgeValue)];
+        tab.badgeOffsetX = tabItem.badgeOffset.width;
+        tab.badgeOffsetY = tabItem.badgeOffset.height;
+        
         //setup
         [self setTabContent:tab withTabItem:tabItem];
     }
@@ -366,6 +422,15 @@
         return YES;
     } else {
         NSLog(@"Attention! Your delegate doesn't have tabView:tabBecameEnabledAtIndex:tab: method implementation!");
+        return NO;
+    }
+}
+
+- (BOOL)delegateRespondsToTapOnEnabledSelector {
+    if ([self.delegate respondsToSelector:@selector(tabView:didTapOnEnabledItemAtIndex:tab:)]) {
+        return YES;
+    } else {
+        NSLog(@"Attention! Your delegate doesn't have tabView:didTapOnEnabledItemAtIndex:tab: method implementation!");
         return NO;
     }
 }
