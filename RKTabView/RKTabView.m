@@ -236,9 +236,21 @@
     }
 }
 
-- (CGFloat)tabItemWidth {
+- (CGFloat)defaultTabItemWidth {
     CGFloat restrictedWidth = self.frame.size.width - self.horizontalInsets.left - self.horizontalInsets.right;
-    return self.tabItems.count > 0 ? restrictedWidth/self.tabItems.count : restrictedWidth;
+	NSUInteger numItemsUsingDefaultWidth = self.tabItems.count;
+	for (RKTabItem *item in self.tabItems) {
+		if (item.customAbsoluteWidth > 0) {
+			restrictedWidth -= item.customAbsoluteWidth;
+			numItemsUsingDefaultWidth -= 1;
+		} else if (item.customFractionWidth > 0) {
+			restrictedWidth -= item.customFractionWidth * self.frame.size.width;
+			numItemsUsingDefaultWidth -= 1;
+		}
+	}
+	// note, this doesn't work well when all items have a custom width (unless all use fraction widths that add to 1.0)
+	// the items won't be spaced extra to fill the full width, since only non-custom width items get dynamically spaced
+    return numItemsUsingDefaultWidth > 0 ? restrictedWidth/numItemsUsingDefaultWidth : 0;
 }
 
 - (CGFloat)tabItemHeight {
@@ -254,9 +266,25 @@
 }
 
 - (CGRect)frameForTab:(RKTabItem *)tabItem {
-    CGFloat width  = [self tabItemWidth];
+    CGFloat defaultWidth = [self defaultTabItemWidth];
+    CGFloat width = defaultWidth;
     CGFloat height = [self tabItemHeight];
-    CGFloat x = self.horizontalInsets.left + [self indexOfTab:tabItem] * width;
+	CGFloat x = self.horizontalInsets.left;
+	for (NSUInteger idx = 0, tabIndex = [self indexOfTab:tabItem]; idx < tabIndex; ++idx) {
+		RKTabItem *preceedingItem = (RKTabItem *)self.tabItems[idx];
+		if (preceedingItem.customAbsoluteWidth > 0) {
+			x += preceedingItem.customAbsoluteWidth;
+		} else if (preceedingItem.customFractionWidth > 0) {
+			x += preceedingItem.customFractionWidth * self.frame.size.width;
+		} else {
+		    x += defaultWidth;
+		}
+	}
+    if (tabItem.customAbsoluteWidth > 0) {
+        width = tabItem.customAbsoluteWidth;
+    } else if (tabItem.customFractionWidth > 0) {
+        width = tabItem.customFractionWidth * self.frame.size.width;
+    }
     return CGRectMake(x, 0, width, height);
 }
 
