@@ -18,6 +18,7 @@ static inline HorizontalEdgeInsets HorizontalEdgeInsetsMake (CGFloat left, CGFlo
 
 @protocol RKTabViewDelegate <NSObject>
 
+@optional
 //Called for all types except TabTypeButton
 - (void)tabView:(RKTabView *)tabView tabBecameEnabledAtIndex:(NSUInteger)index tab:(RKTabItem *)tabItem;
 //Called Only for unexcludable items. (TabTypeUnexcludable)
@@ -45,7 +46,7 @@ static inline HorizontalEdgeInsets HorizontalEdgeInsetsMake (CGFloat left, CGFlo
 @property (nonatomic, strong) UIColor *badgeTitleColor;
 @property (nonatomic, strong) UIColor *badgeBackgroundColor;
 
-- (id)initWithFrame:(CGRect)frame andTabItems:(NSArray *)tabItems;
+- (instancetype)initWithFrame:(CGRect)frame andTabItems:(NSArray *)tabItems;
 
 - (void)switchTabIndex:(NSUInteger)index;
 - (void)setBadgeValue:(NSInteger)value forTabAtIndex:(NSUInteger)index;

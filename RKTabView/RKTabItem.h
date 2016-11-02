@@ -32,17 +32,20 @@ typedef enum {
 @property (nonatomic, assign) NSInteger badgeValue;
 @property (nonatomic, assign) CGSize badgeOffset;
 
-+ (RKTabItem *)createUsualItemWithImageEnabled:(UIImage *)imageEnabled
+@property (nonatomic) CGFloat customAbsoluteWidth;
+@property (nonatomic) CGFloat customFractionWidth;
+
++ (instancetype)createUsualItemWithImageEnabled:(UIImage *)imageEnabled
                                  imageDisabled:(UIImage *)imageDisabled;
 
-+ (RKTabItem *)createUnexcludableItemWithImageEnabled:(UIImage *)imageEnabled
++ (instancetype)createUnexcludableItemWithImageEnabled:(UIImage *)imageEnabled
                                         imageDisabled:(UIImage *)imageDisabled;
 
-+ (RKTabItem *)createButtonItemWithImage:(UIImage *)image
++ (instancetype)createButtonItemWithImage:(UIImage *)image
                                   target:(id)target
                                 selector:(SEL)selector;
 
-+ (RKTabItem *)createItemWithImage:(UIImage *)image
++ (instancetype)createItemWithImage:(UIImage *)image
                            gesture:(UIGestureRecognizer *)gesture;
 
 - (void)switchState;
