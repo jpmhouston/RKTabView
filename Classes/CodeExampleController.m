@@ -10,6 +10,9 @@
 
 #import "RKTabView.h"
 
+@interface CodeExampleController () <RKTabViewDelegate>
+@end
+
 @implementation CodeExampleController
 
 - (void)viewDidLoad {
@@ -17,10 +20,18 @@
     
     self.title = @"Code implementation example";
     
-    RKTabItem *tabItemGooglePlus = [RKTabItem createButtonItemWithImage:[UIImage imageNamed:@"googleplus"] target:self selector:@selector(buttonTabPressed:)];
-    RKTabItem *facebook = [RKTabItem createButtonItemWithImage:[UIImage imageNamed:@"facebook"] target:self selector:@selector(buttonTabPressed:)];
-    RKTabItem *flickr = [RKTabItem createButtonItemWithImage:[UIImage imageNamed:@"twitter"] target:self selector:@selector(buttonTabPressed:)];
+//    RKTabItem *tabItemGooglePlus = [RKTabItem createButtonItemWithImage:[UIImage imageNamed:@"googleplus"] target:self selector:@selector(buttonTabPressed:)];
+//    RKTabItem *facebook = [RKTabItem createButtonItemWithImage:[UIImage imageNamed:@"facebook"] target:self selector:@selector(buttonTabPressed:)];
+//    RKTabItem *flickr = [RKTabItem createButtonItemWithImage:[UIImage imageNamed:@"twitter"] target:self selector:@selector(buttonTabPressed:)];
+//    RKTabItem *twitter = [RKTabItem createButtonItemWithImage:[UIImage imageNamed:@"flickr"] target:self selector:@selector(buttonTabPressed:)];
+    
+    RKTabItem *tabItemGooglePlus = [RKTabItem createUsualItemWithImageEnabled:nil imageDisabled:[UIImage imageNamed:@"googleplus"]];
+    RKTabItem *facebook = [RKTabItem createUsualItemWithImageEnabled:nil imageDisabled:[UIImage imageNamed:@"facebook"]];
+    RKTabItem *flickr = [RKTabItem createUsualItemWithImageEnabled:nil imageDisabled:[UIImage imageNamed:@"twitter"]];
     RKTabItem *twitter = [RKTabItem createButtonItemWithImage:[UIImage imageNamed:@"flickr"] target:self selector:@selector(buttonTabPressed:)];
+    twitter.customFractionWidth = .4;
+    
+    facebook.tabState = TabStateEnabled;
     
     RKTabView* tabView = [[RKTabView alloc] initWithFrame:CGRectMake(0, 248, 320, 72)
                                               andTabItems:@[
@@ -30,8 +41,9 @@
                                                              twitter
                                                              ]];
     tabView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.1f];
-    tabView.horizontalInsets = HorizontalEdgeInsetsMake(70, 70);
+    //tabView.horizontalInsets = HorizontalEdgeInsetsMake(70, 70);
     tabView.drawSeparators = YES;
+    tabView.delegate = self;
     [self.view addSubview:tabView];
     
     //autolayout configuration
@@ -64,6 +76,10 @@
 
 - (void)buttonTabPressed:(id)sender {
     NSLog(@"Button %@ has been pressed in tabView", sender);
+}
+
+- (void)tabView:(RKTabView *)tabView tabBecameEnabledAtIndex:(NSUInteger)index tab:(RKTabItem *)tabItem {
+    NSLog(@"Tab # %tu became enabled in tabView", index);
 }
 
 @end
